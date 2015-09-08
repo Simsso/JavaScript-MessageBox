@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>JavaScript MessageBox</title>
+    <link rel="stylesheet" type="text/css" href="messagebox.css">
+  </head>
+  <body>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="messagebox.js"></script>
+    <script type="text/javascript">
+      var test = new MessageBox();
+      test.setTitle('Clear page');
+      test.setContent('Do you want to remove the lorem ipsum?');
+      test.setButtons(MessageBox.ButtonType.YesNoCancel);
+      test.show();
+      test.setCallback(function(button) {
+        switch (button) {
+          case 'Yes':
+            document.write('done...');
+            break;
+          default:
+            break;
+        }
+      });
+    </script>
+  </body>
+</html>
