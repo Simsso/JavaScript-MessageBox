@@ -14,7 +14,7 @@
       test.setTitle('Clear page');
       test.setContent('Do you want to remove the lorem ipsum?');
       test.setButtons(MessageBox.ButtonType.YesNoCancel);
-      test.show();
+      test.setFocusedButton('Yes');
       test.setCallback(function(button) {
         switch (button) {
           case 'Yes':
@@ -24,6 +24,7 @@
             break;
         }
       });
+      test.show();
     </script>
   </body>
 </html>

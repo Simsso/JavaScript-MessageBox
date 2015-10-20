@@ -60,24 +60,36 @@
 
 .message-box .message-box-buttons ul {
   list-style-type: none;
+  float: right;
 }
 
 .message-box .message-box-buttons ul li {
+  float: left;
+}
+
+.message-box .message-box-buttons ul li input[type="button"] {
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
   padding: 12px;
+  cursor: pointer;
+
   font-size: 10.5pt;
-  float: right;
   text-transform: uppercase;
   color: #4F5B93;
-  cursor: pointer;
   
   transition-duration: 0.2s;
   transition-property: background-color, color;
   transition-timing-function: ease-in;
 }
 
-.message-box .message-box-buttons ul li:hover {
+.message-box .message-box-buttons ul li input[type="button"]:hover {
   background-color: rgb(245,245,245);
   color: rgb(0,0,0);
+}
+
+.message-box .message-box-buttons ul li input[type="button"]:focus {
+  font-weight: bold;
 }
 
 .message-box .message-box-buttons ul li:not(:last-child) {

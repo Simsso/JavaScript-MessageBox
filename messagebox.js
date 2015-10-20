@@ -7,11 +7,11 @@ function MessageBox() {
   MessageBox.allMessageBoxes.push(this);
   this.id = MessageBox.allMessageBoxes.indexOf(this);
   
-  var messageBoxHtml = '<dialog id="' + MessageBox.IdPrefix + this.id + '" class="message-box">';
+  var messageBoxHtml = '<div id="' + MessageBox.IdPrefix + this.id + '" class="message-box">';
   messageBoxHtml += '<div class="message-box-title"></div>';
   messageBoxHtml += '<div class="message-box-content"></div>';
   messageBoxHtml += '<div class="message-box-buttons"></div>';
-  messageBoxHtml += '</dialog>';
+  messageBoxHtml += '</div>';
   $('body').append(messageBoxHtml);
   
   this.element = $('#' + MessageBox.IdPrefix + this.id);
@@ -19,11 +19,48 @@ function MessageBox() {
   this.refreshHtmlContent();
 }
 
+MessageBox.IdPrefix = 'message-box-id-';
+
+MessageBox.allMessageBoxes = [];
+
+MessageBox.getNumberOfShownMessageBoxes = function() {
+  var count = 0;
+  for (var i = 0; i < MessageBox.allMessageBoxes.length; i++) {
+    if (MessageBox.allMessageBoxes[i].shown) {
+      count++;
+    }
+  }
+  return count;
+};
+
+MessageBox.buttonTypeToStringArray = function(buttonType) {
+  switch(buttonType) {
+    case MessageBox.ButtonType.Ok: 
+      return ['Ok'];
+    case MessageBox.ButtonType.YesNo:
+      return ['Yes', 'No'];
+    case MessageBox.ButtonType.YesNoCancel:
+      return ['Yes', 'No', 'Cancel'];
+    default:
+      throw new Error('The passed button type doesn\'t exist.');
+  }
+};
+
+MessageBox.ButtonType = Object.freeze(
+  {
+    Ok: 0,
+    YesNo: 1,
+    YesNoCancel: 2,
+    Custom: 3
+  }
+);
+
 MessageBox.prototype.callback = function(button) { };
 MessageBox.prototype.button = MessageBox.buttonTypeToStringArray(MessageBox.ButtonType.Ok);
 MessageBox.prototype.title = 'Title';
 MessageBox.prototype.content = 'Content.';
 MessageBox.prototype.shown = false;
+MessageBox.prototype.focusedButton = null;
 
 MessageBox.prototype.refreshHtmlContent = function() {
   var i;
@@ -31,16 +68,16 @@ MessageBox.prototype.refreshHtmlContent = function() {
   children.eq(0).html(this.title);
   children.eq(1).html(this.content);
   var buttonsHtml = '<ul>';
-  for (i = 0; i < this.button.length; i++) {
-    buttonsHtml += '<li>' + this.button[i] + '</li>';
+  for (i = this.button.length - 1; i >= 0; i--) {
+    buttonsHtml += '<li><input type="button" value="' + this.button[i] + '" ' + ((this.button[i] === this.focusedButton) ? 'autofocus' : '') + '/></li>';
   }
   buttonsHtml += '</ul>';
   children.eq(2).html(buttonsHtml);
   
   // add buttons event listener
   var self = this;
-  children.eq(2).children().on('click', function(event) {
-    self.callback($(event.target).html());
+  children.eq(2).find('input[type="button"]').on('click', function(event) {
+    self.callback($(event.target).attr('value'));
     self.hide();
   });
 };
@@ -69,7 +106,7 @@ MessageBox.prototype.setCallback = function(callback) {
     this.callback = callback;
   }
   else {
-    this.callback = function() {};
+    throw new Error('No function has been passed.')
   }
 };
 
@@ -96,38 +133,8 @@ MessageBox.prototype.setContent = function(content) {
   this.refreshHtmlContent();
 };
 
-MessageBox.IdPrefix = 'message-box-id-';
+MessageBox.prototype.setFocusedButton = function(button) {
+  this.focusedButton = button;
 
-MessageBox.allMessageBoxes = [];
-
-MessageBox.getNumberOfShownMessageBoxes = function() {
-  var count = 0;
-  for (var i = 0; i < MessageBox.allMessageBoxes.length; i++) {
-    if (MessageBox.allMessageBoxes[i].shown) {
-      count++;
-    }
-  }
-  return count;
+  this.refreshHtmlContent();
 };
-
-MessageBox.buttonTypeToStringArray = function(buttonType) {
-  switch(buttonType) {
-    case MessageBox.ButtonType.Ok: 
-      return ['Ok'];
-    case MessageBox.ButtonType.YesNo:
-      return ['Yes', 'No'];
-    case MessageBox.ButtonType.YesNoCancel:
-      return ['Yes', 'No', 'Cancel'];
-    default:
-      return undefined;
-  }
-};
-
-MessageBox.ButtonType = Object.freeze(
-  {
-    Ok: 0,
-    YesNo: 1,
-    YesNoCancel: 2,
-    Custom: 3
-  }
-);
