@@ -1,3 +1,5 @@
+"use strict";
+
 function MessageBox() {
   if (MessageBox.allMessageBoxes.length === 0) {
     // add messagebox background if no messagebox has been created yet
@@ -69,7 +71,7 @@ MessageBox.prototype.refreshHtmlContent = function() {
   children.eq(1).html(this.content);
   var buttonsHtml = '<ul>';
   for (i = this.button.length - 1; i >= 0; i--) {
-    buttonsHtml += '<li><input type="button" value="' + this.button[i] + '" ' + ((this.button[i] === this.focusedButton) ? 'autofocus' : '') + '/></li>';
+    buttonsHtml += '<li><input type="button" value="' + this.button[i] + '" /></li>';
   }
   buttonsHtml += '</ul>';
   children.eq(2).html(buttonsHtml);
@@ -99,6 +101,7 @@ MessageBox.prototype.show = function() {
   
   this.shown = true;
   this.element.show();
+  this.element.find('input[type="button"][value="' + this.focusedButton + '"]').focus();
 };
 
 MessageBox.prototype.setCallback = function(callback) {

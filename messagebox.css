@@ -69,7 +69,9 @@
 
 .message-box .message-box-buttons ul li input[type="button"] {
   border: none;
+  font-weight: normal;
   box-shadow: none;
+  background: transparent;
   background-color: transparent;
   padding: 12px;
   cursor: pointer;
